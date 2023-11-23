@@ -12,10 +12,76 @@ services:
     volumes:
       - .:/web
     environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
       - DATABASE_URL=postgresql://admin:admin@postgres:5432/admin
       - SECRET_KEY=2e2406f8eb7862f9d8f8f0f8411b2b4c221505a15f26b8b201391df8a77ccc90
     depends_on:
       - db
+      - redis
+
+  celery-worker:
+    container_name: "celery-worker"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "celery -A core.celery:celery worker -l INFO"
+    volumes:
+      - .:/web
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_URL=postgresql://admin:admin@postgres:5432/admin
+      - SECRET_KEY=2e2406f8eb7862f9d8f8f0f8411b2b4c221505a15f26b8b201391df8a77ccc90
+    depends_on:
+      - db
+      - redis
+      - web
+      - celery-beat
+
+  celery-beat:
+    container_name: "celery-beat"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "celery -A core.celery:celery beat -l INFO"
+    volumes:
+      - .:/web
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_URL=postgresql://admin:admin@postgres:5432/admin
+      - SECRET_KEY=2e2406f8eb7862f9d8f8f0f8411b2b4c221505a15f26b8b201391df8a77ccc90
+    depends_on:
+      - db
+      - redis
+      - web
+
+  celery-flower:
+    container_name: "celery-flower"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "celery -A core.celery:celery flower --port=5001"
+    ports:
+      - "5001:5001"
+    volumes:
+      - .:/web
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_URL=postgresql://admin:admin@postgres:5432/admin
+      - SECRET_KEY=2e2406f8eb7862f9d8f8f0f8411b2b4c221505a15f26b8b201391df8a77ccc90
+    depends_on:
+      - db
+      - redis
+      - web
+      - celery-beat
+      - celery-worker
 
   db:
     image: postgres:15.3-alpine3.18
@@ -24,3 +90,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=admin
+
+  redis:
+    image: redis:7.2.2-alpine3.18
+    hostname: redis
