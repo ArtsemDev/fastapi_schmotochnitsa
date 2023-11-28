@@ -6,6 +6,7 @@ __all__ = [
     "Base",
     "Advert",
     "Category",
+    "User",
     "engine",
     "session"
 ]

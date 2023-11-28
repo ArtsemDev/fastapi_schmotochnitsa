@@ -7,9 +7,10 @@ from sqlalchemy import (
     DECIMAL,
     ForeignKey,
     TIMESTAMP,
-    BOOLEAN
+    BOOLEAN, CHAR
 )
 from sqlalchemy.orm import relationship
+from ulid import parse
 
 from .base import Base
 
@@ -18,6 +19,7 @@ __all__ = [
     "Base",
     "Advert",
     "Category",
+    "User",
 ]
 
 
@@ -64,3 +66,20 @@ class Advert(Base):
 
     def __str__(self):
         return self.title
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(CHAR(26), primary_key=True)
+    email = Column(VARCHAR(128), nullable=False, unique=True)
+    password = Column(CHAR(60), nullable=False)
+    is_active = Column(BOOLEAN, default=False)
+    is_staff = Column(BOOLEAN, default=False)
+
+    @property
+    def date_register(self):
+        return parse(self.id).timestamp().datetime
+
+    def __str__(self) -> str:
+        return self.email

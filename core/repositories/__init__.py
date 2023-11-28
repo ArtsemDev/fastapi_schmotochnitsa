@@ -1,6 +1,8 @@
 from .category import *
+from .user import *
 
 
 __all__ = [
-    "Category"
+    "Category",
+    "user_repository"
 ]

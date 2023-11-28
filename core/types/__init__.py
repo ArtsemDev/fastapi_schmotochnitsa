@@ -1,5 +1,7 @@
 from .advert import *
 from .category import *
+from .user import *
+from .token import TokenDetail
 
 
 __all__ = [
@@ -8,5 +10,11 @@ __all__ = [
     "AdvertDetail",
     "AdvertEdit",
     # category
-    "CategoryDetail"
+    "CategoryDetail",
+    # user
+    "UserDetail",
+    "UserLoginForm",
+    "UserRegisterForm",
+    # token
+    "TokenDetail",
 ]

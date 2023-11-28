@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Path
 from fastapi_cache.decorator import cache
 
-from core.repositories.category import category_manager, Category
+from core.dependencies import IsAuthenticated
+from core.repositories.category import Category
 from core.types import CategoryDetail
-from core.tasks import ping
 
 router = APIRouter()
 
@@ -14,13 +14,13 @@ router = APIRouter()
 )
 @cache(expire=60)
 async def all_categories(manager: Category):
-    ping.delay()
     return manager.all()
 
 
 @router.get(
     path="/categories/{pk}",
-    response_model=CategoryDetail
+    response_model=CategoryDetail,
+    dependencies=[IsAuthenticated]
 )
 @cache(expire=60)
 async def get(manager: Category, pk: int = Path(ge=1, example=42)):
