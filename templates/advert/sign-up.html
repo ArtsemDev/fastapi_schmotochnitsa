@@ -1,0 +1,46 @@
+{% extends "advert/base.html" %}
+
+{% block title %}
+SIGN UP
+{% endblock %}
+
+{% block content %}
+{% include "advert/components/nav.html" %}
+{% with %}
+    {% set background="advert/assets/img/home-bg.jpg" %}
+    {% set heading="SIGN UP" %}
+    {% include "advert/components/header.html" %}
+{% endwith %}
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="my-5">
+                    <form id="contactForm" method="post">
+
+                        <div class="form-floating">
+                            <input class="form-control" id="email" type="email" placeholder="Enter your email..." name="email"/>
+                            <label for="email">Email address</label>
+                        </div>
+
+                        <div class="form-floating">
+                            <input class="form-control" id="password" type="password" placeholder="Enter your password..." name="password"/>
+                            <label for="password">Password</label>
+                        </div>
+
+                        <div class="form-floating">
+                            <input class="form-control" id="confirm-password" type="password" placeholder="Enter your password..." name="confirm_password"/>
+                            <label for="confirm-password">Confirm Password</label>
+                        </div>
+
+                        <br />
+
+                        <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">SIGN UP</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% include "advert/components/footer.html" %}
+{% endblock %}

@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Self, Optional
 
+from fastapi import Form
 from pydantic import EmailStr, model_validator, Field
 from ulid import new
 
@@ -23,6 +24,17 @@ class UserLoginForm(Schema):
     def validate_password(self, hash_password: str) -> bool:
         return pwd_context.verify(self.password, hash_password)
 
+    @classmethod
+    def as_form(
+            cls,
+            email: str = Form(),
+            password: str = Form()
+    ) -> Self:
+        return cls(
+            email=email,
+            password=password
+        )
+
 
 class UserRegisterForm(UserLoginForm):
     confirm_password: PasswordStr
@@ -33,6 +45,19 @@ class UserRegisterForm(UserLoginForm):
             raise ValueError("password and confirm password does not match")
 
         return self
+
+    @classmethod
+    def as_form(
+            cls,
+            email: str = Form(),
+            password: str = Form(),
+            confirm_password: str = Form(),
+    ) -> Self:
+        return cls(
+            email=email,
+            password=password,
+            confirm_password=confirm_password
+        )
 
 
 class UserDetail(Schema):

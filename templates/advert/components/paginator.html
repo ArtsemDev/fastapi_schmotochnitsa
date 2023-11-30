@@ -1,0 +1,21 @@
+<div class="d-flex justify-content-center mb-4">
+
+{% if current_page > 1 %}
+    <a class="btn btn-primary text-uppercase" href="{{ url_for('advert_index') }}">&lt;&lt;</a>
+    <a class="btn btn-primary text-uppercase" href="{{ url_for('advert_index') }}?page={{current_page-1}}">&lt;</a>
+{% endif %}
+
+{% for page in range(1, max_page+1) %}
+    {% if page == current_page %}
+    <a class="btn btn-warning text-uppercase">{{ page }}</a>
+    {% else %}
+    <a class="btn btn-primary text-uppercase" href="{{ url_for('advert_index') }}?page={{page}}">{{ page }}</a>
+    {% endif %}
+{% endfor %}
+
+{% if current_page < max_page %}
+    <a class="btn btn-primary text-uppercase" href="{{ url_for('advert_index') }}?page={{current_page+1}}">&gt;</a>
+    <a class="btn btn-primary text-uppercase" href="{{ url_for('advert_index') }}?page={{max_page}}">&gt;&gt;</a>
+{% endif %}
+
+</div>

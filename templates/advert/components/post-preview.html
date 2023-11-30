@@ -1,0 +1,11 @@
+<div class="post-preview">
+    <a href="{{ url_for('advert_detail', slug=advert.slug) }}">
+        <h2 class="post-title">{{ advert.title }}</h2>
+        <h3 class="post-subtitle">{{ advert.body[:40] }}...</h3>
+    </a>
+    <p class="post-meta">
+        {{ advert.date_created.strftime("%d %m %Y %H:%M") }}
+    </p>
+</div>
+<!-- Divider-->
+<hr class="my-4" />

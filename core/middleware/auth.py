@@ -4,10 +4,11 @@ from starlette.middleware.authentication import AuthenticationBackend, AuthCrede
 from starlette.requests import HTTPConnection
 
 from core.repositories import user_repository
+from core.settings import redis
 from core.utils import verify_jwt_token
 
 
-__all__ = ["JWTAuthenticationBackend"]
+__all__ = ["JWTAuthenticationBackend", "SessionAuthenticationBackend"]
 
 
 class AuthenticatedUser:
@@ -36,3 +37,23 @@ class JWTAuthenticationBackend(AuthenticationBackend):
             if user is None:
                 return
             return AuthCredentials(["authenticated"]), AuthenticatedUser(identity=user_id, email=user.email)
+
+
+class SessionAuthenticationBackend(AuthenticationBackend):
+
+    async def authenticate(
+        self, conn: HTTPConnection
+    ) -> typing.Optional[typing.Tuple["AuthCredentials", "AuthenticatedUser"]]:
+        if "session" not in conn.cookies:
+            return
+
+        token = conn.cookies.get("session")
+        print(token)
+        user_id = await redis.get(name=token)
+        print(user_id)
+        if user_id is None:
+            return
+        user = user_repository.get(pk=user_id.decode())
+        if user is None:
+            return
+        return AuthCredentials(["authenticated"]), AuthenticatedUser(identity=user_id, email=user.email)

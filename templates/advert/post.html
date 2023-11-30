@@ -1,0 +1,18 @@
+{% extends "advert/base.html" %}
+
+{% block title %}
+{{ advert.title }}
+{% endblock %}
+
+{% block content %}
+
+{% include "advert/components/nav.html" %}
+{% with %}
+{% set heading=advert.title %}
+{% set background="advert/assets/img/post-bg.jpg" %}
+{% include "advert/components/header.html" %}
+{% endwith %}
+<!-- Post Content-->
+{% include "advert/components/post-detail.html" %}
+{% include "advert/components/footer.html" %}
+{% endblock %}

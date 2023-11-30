@@ -1,0 +1,21 @@
+{% extends "advert/base.html" %}
+
+{% block title %}
+HOME PAGE
+{% endblock %}
+
+{% block content %}
+<!-- Navigation-->
+{% include "advert/components/nav.html" %}
+<!-- Page Header-->
+{% with %}
+    {% set heading="Home Page" %}
+    {% set subheading="Subheading" %}
+    {% set background="advert/assets/img/home-bg.jpg" %}
+    {% include "advert/components/header.html" %}
+{% endwith %}
+<!-- Main Content-->
+{% include "advert/components/post-preview-list.html" %}
+<!-- Footer-->
+{% include "advert/components/footer.html" %}
+{% endblock %}
