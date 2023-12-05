@@ -2,6 +2,7 @@ from .advert import *
 from .category import *
 from .user import *
 from .token import TokenDetail
+from .errors import *
 
 
 __all__ = [
@@ -17,4 +18,7 @@ __all__ = [
     "UserRegisterForm",
     # token
     "TokenDetail",
+    # errors
+    "ValidationError",
+    "HTTPValidationError",
 ]

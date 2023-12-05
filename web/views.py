@@ -18,6 +18,10 @@ from core.utils import create_user_verify_url
 from core.tasks import send_email
 from core.dependencies import IsAuthenticated
 
+
+__all__ = ["router"]
+
+
 router = APIRouter()
 
 

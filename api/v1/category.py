@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Path
-from fastapi_cache.decorator import cache
+# from fastapi_cache.decorator import cache
 
 from core.dependencies import IsAuthenticated
 from core.repositories.category import Category
@@ -10,26 +10,18 @@ router = APIRouter()
 
 @router.get(
     path="/categories",
-    response_model=list[CategoryDetail]
+    response_model=list[CategoryDetail],
+    name="category_list"
 )
-@cache(expire=60)
-async def all_categories(manager: Category):
+async def category_list(manager: Category):
     return manager.all()
 
 
 @router.get(
     path="/categories/{pk}",
     response_model=CategoryDetail,
-    dependencies=[IsAuthenticated]
+    dependencies=[IsAuthenticated],
+    name="category_detail"
 )
-@cache(expire=60)
-async def get(manager: Category, pk: int = Path(ge=1, example=42)):
+async def category_detail(manager: Category, pk: int = Path(ge=1, examples=[42])):
     return manager.get(pk=pk)
-
-
-async def update(self, pk: int = Path(ge=1, example=42)):
-    pass
-
-
-async def delete(self, pk: int = Path(ge=1, example=42)):
-    return self.manager.delete(pk=pk)
